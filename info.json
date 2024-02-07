@@ -1,0 +1,62 @@
+[
+    {
+        "code": "BLUE 01",
+        "name": "Sobre a brevidade da vida",
+        "singer": "Andrei Machado",
+        "album": "Catarse",
+        "link": {
+            "music": "https://music.163.com/#/song?id=28273865",
+            "image": "https://www.pixiv.net/artworks/87229415"
+        },
+        "color": {
+            "font": "#fff",
+            "back": "#222",
+            "top": "#aa4",
+            "face": "#05a"
+        },
+        "resource": {
+            "music": "./blue/01/1.m4a",
+            "image": "./blue/01/1.png"
+        }
+    },
+    {
+        "code": "BLUE 02",
+        "name": "Улетали птицами гордыми",
+        "singer": "NUANHAO / MINGYANG / Killer",
+        "album": "Улетали птицами гордо",
+        "link": {
+            "music": "https://music.163.com/#/song?id=1377164042",
+            "image": "https://www.pixiv.net/artworks/47123139"
+        },
+        "color": {
+            "font": "#fff",
+            "back": "#222",
+            "top": "#a4a",
+            "face": "#05a"
+        },
+        "resource": {
+            "music": "./blue/02/1.m4a",
+            "image": "./blue/02/1.jpg"
+        }
+    },
+    {
+        "code": "ORANGE 01",
+        "name": "Midsummer Waltz",
+        "singer": "Wanderer's Trove",
+        "album": "Grass in the Wind",
+        "link": {
+            "music": "https://music.163.com/#/song?id=1399729935",
+            "image": "https://www.pixiv.net/artworks/47123139"
+        },
+        "color": {
+            "font": "#fff",
+            "back": "#222",
+            "top": "#c33",
+            "face": "#d70"
+        },
+        "resource": {
+            "music": "./orange/01/1.m4a",
+            "image": "./orange/01/1.png"
+        }
+    }
+]

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music</title>
+</head>
+
+<body style="margin: 0;">
+    <style>
+        .card {
+            position: relative;
+            width: 150px;
+            height: 300px;
+            transform: perspective(500px) rotateY(30deg);
+            display: flex;
+            margin-left: -60px;
+            cursor: pointer;
+
+            animation: slide-outt 200ms 1;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes slide-out {
+            from {
+                transform: perspective(500px) rotateY(30deg);
+            }
+
+            to {
+                transform: perspective(500px) rotateY(-30deg);
+                margin-left: -25px;
+                margin-right: 60px;
+            }
+        }
+
+        @keyframes slide-outt {
+            from {
+                transform: perspective(500px) rotateY(-30deg);
+                margin-left: -25px;
+                margin-right: 60px;
+            }
+
+            to {
+                transform: perspective(500px) rotateY(30deg);
+            }
+        }
+
+        .card:hover {
+            animation: slide-out 200ms 1;
+            animation-fill-mode: forwards;
+        }
+
+        .card .core {
+            font-size: 26px;
+            width: calc(100% - 40px);
+            padding: 20px;
+            color: #fff;
+            z-index: 2;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card:hover::before {
+            left: -1px;
+            right: -4px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -4px;
+            right: -1px;
+            bottom: -1px;
+            background: #fff;
+            z-index: 0;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: #FFFFFF;
+            z-index: 1;
+            filter: blur(10px);
+            opacity: 0.2;
+        }
+    </style>
+
+    <style>
+        @keyframes slide-out2 {
+            from {
+                height: 1vh;
+            }
+
+            to {
+                height: 5vh;
+            }
+        }
+
+        @keyframes slide-out3 {
+            from {
+                height: 5vh;
+            }
+
+            to {
+                height: 1vh;
+            }
+        }
+
+        .top-bar {
+            animation: slide-out2 200ms forwards;
+        }
+
+        .top-bar2 {
+            animation: slide-out3 200ms forwards;
+        }
+    </style>
+
+    <script>
+        class MusicBar {
+            constructor(el) {
+                this.time_bar_container = document.createElement("div");
+                this.time_bar_container.style = "position: fixed; top: 0; left: 0; height: 5vh; width: 100vw; display: block; cursor: pointer;";
+                this.time_bar = document.createElement("div");
+                this.time_bar.style = "height:1vh; width: 1px; display: block;";
+                this.video = document.createElement("video");
+                this.video.style = "display: none;";
+
+                el.append(this.time_bar_container, this.video);
+                this.time_bar_container.append(this.time_bar);
+
+                this.time_bar_container.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    if (this.paused) this.play();
+                    else this.pause();
+                });
+
+                this.time_bar_container.addEventListener("dblclick", (event) => {
+                    event.stopPropagation();
+                    this.set_bar_width(event.clientX);
+                });
+
+                this.time_bar_container.addEventListener("mouseenter", () => this.time_bar.className = "top-bar");
+                this.time_bar_container.addEventListener("mouseleave", () => this.time_bar.className = "top-bar2");
+
+                this.timer = 0;
+                this.timer2 = 0;
+                this.video_volumn = 0;
+                this.paused = true;
+            }
+
+            update_bar_width() {
+                this.time_bar.style.width = window.innerWidth * this.video.currentTime / this.video.duration + "px";
+            }
+
+            set_current_time(current_time) {
+                this.video.currentTime = current_time;
+                this.update_bar_width();
+            }
+
+            set_bar_width(width) {
+                this.time_bar.style.width = width + "px";
+                var d = this.video.duration;
+                if (!d) d = 0;
+                this.video.currentTime = d * width / window.innerWidth;
+            }
+
+            play() {
+                this.paused = false;
+                this.video.play();
+                this.video_volumn = 0;
+
+                clearInterval(this.timer2);
+                this.timer2 = setInterval(() => {
+                    this.video_volumn += 1;
+                    if (this.video_volumn >= 100) {
+                        this.video_volumn = 100;
+                        clearInterval(this.timer2);
+                    }
+                    this.video.volume = this.video_volumn / 100;
+                }, 10);
+
+                clearInterval(this.timer);
+                this.timer = setInterval(() => this.update_bar_width(), 10);
+            }
+
+            pause() {
+                this.paused = true;
+
+                clearInterval(this.timer2);
+                this.timer2 = setInterval(() => {
+                    this.video_volumn -= 1;
+                    if (this.video_volumn <= 0) {
+                        this.video_volumn = 0;
+                        clearInterval(this.timer2);
+                        this.video.pause();
+                        clearInterval(this.timer);
+                    }
+                    this.video.volume = this.video_volumn / 100;
+                }, 10);
+            }
+
+            set_data(data) {
+                this.time_bar.style.backgroundColor = data.color.top;
+                this.video.src = data.resource.music;
+            }
+        }
+
+        class MusicInfo {
+            constructor(el) {
+                this.main = document.createElement("div");
+                this.img = document.createElement("img");
+                this.info = document.createElement("div");
+                this.name = document.createElement("div");
+                this.album = document.createElement("div");
+                this.singer = document.createElement("div");
+                this.music_link = "";
+                this.image_link = "";
+                this.main.style = "height: 100vh; width: 100vw; display:flex; flex-direction: row; align-items: center; justify-content: center; gap: 10vw;";
+                this.img.style = "max-height: 80vh; max-width: 60vw; cursor: pointer;";
+                this.name.style = "cursor: pointer; font-size: 24px; font-weight: bold;";
+                this.info.style = "display: flex; flex-direction: column; gap: 2vh";
+                this.name.title = "name";
+                this.album.title = "album";
+                this.singer.title = "singer";
+
+                this.main.append(this.img, this.info);
+                this.info.append(this.name, this.album, this.singer);
+                el.append(this.main);
+                this.name.addEventListener("click", () => window.open(this.music_link, "_blank"));
+                this.img.addEventListener("click", () => window.open(this.image_link, "_blank"));
+            }
+
+            set_data(data) {
+                this.name.innerHTML = data.name;
+                this.music_link = data.link.music;
+                this.album.innerHTML = data.album;
+                this.singer.innerHTML = data.singer;
+                this.img.src = data.resource.image;
+                this.image_link = data.link.image;
+                this.info.style.color = data.color.font;
+                this.main.style.backgroundColor = data.color.back;
+            }
+        }
+
+        class BackHome {
+            constructor(el) {
+                this.btn = document.createElement("div");
+                this.show_part = document.createElement("div");
+                el.append(this.show_part, this.btn);
+
+                this.btn.style = "position: fixed; width: 10vw; height: 50vh; cursor: pointer; top: 50vh; right: 0; transform: translate(26%, -50%);";
+                this.btn.innerHTML = " ";
+
+                this.show_part.style = "position: fixed; width: 80vh; height: 80vh; border-radius: 50%; color: #fff; border: 2px solid #fff; top: 50vh; right: 0; transform: translate(26%, -50%); display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 100px; font-weight: bold; pointer-events: none;";
+                this.show_part.innerHTML = "<div>BACK</div><div>HOME</div>";
+
+                this.btn.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    player.close();
+                    store.open();
+                });
+
+                this.btn.addEventListener("mouseenter", () => this.open());
+                this.btn.addEventListener("mouseleave", () => this.close());
+            }
+
+            open(event) {
+                this.show_part.style.opacity = 0.2;
+            }
+
+            close() {
+                this.show_part.style.opacity = 0;
+            }
+        }
+
+        class Player {
+            constructor(el) {
+                this.main = document.createElement("div");
+                this.main.style = "display:none;";
+                this.music_bar = new MusicBar(this.main);
+                this.music_info = new MusicInfo(this.main);
+                this.btn = new BackHome(this.main);
+                el.append(this.main);
+            }
+
+            open(data) {
+                this.music_bar.set_data(data);
+                this.music_info.set_data(data);
+                this.music_bar.set_bar_width(0);
+                this.music_bar.play();
+                this.btn.close();
+                this.main.style.display = "flex";
+            }
+
+            close() {
+                this.music_bar.pause();
+                this.main.style.display = "none";
+            }
+        }
+
+        class Store {
+            constructor(el) {
+                this.main = document.createElement("div");
+                this.main.style = "display: flex; flex-direction: row; align-items: center; justify-content: center; background-color: #222; height: 100vh; width: 100vw;";
+                el.append(this.main);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', "./info.json", true);
+                xhr.onload = () => {
+                    JSON.parse(xhr.responseText).forEach(data => {
+                        var card_div = document.createElement("div");
+                        var core_div = document.createElement("div");
+
+                        card_div.className = "card";
+                        card_div.addEventListener("click", (event) => {
+                            event.stopPropagation();
+                            this.close();
+                            player.open(event.target.data);
+                        });
+
+                        core_div.className = "core";
+                        core_div.style.backgroundColor = data.color.face;
+                        core_div.innerHTML = data.code;
+                        core_div.data = data;
+
+                        this.main.append(card_div);
+                        card_div.append(core_div);
+                    });
+                }
+                xhr.send();
+            }
+
+            open() {
+                this.main.style.display = "flex";
+            }
+
+            close() {
+                this.main.style.display = "none";
+            }
+        }
+
+        var player = new Player(document.body);
+        var store = new Store(document.body);
+    </script>
+</body>
+
+</html>
