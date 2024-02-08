@@ -40,13 +40,33 @@
         }
     },
     {
+        "code": "BLUE 03",
+        "name": "Parting Comrades",
+        "singer": "Subvision",
+        "album": "Farscape (Original Television Soundtrack)",
+        "link": {
+            "music": "https://music.163.com/#/song?id=1377472534",
+            "image": "https://www.pixiv.net/artworks/111637475"
+        },
+        "color": {
+            "font": "#fff",
+            "back": "#235",
+            "top": "#3bc",
+            "face": "#05a"
+        },
+        "resource": {
+            "music": "./blue/03/1.m4a",
+            "image": "./blue/03/1.png"
+        }
+    },
+    {
         "code": "ORANGE 01",
         "name": "Midsummer Waltz",
         "singer": "Wanderer's Trove",
         "album": "Grass in the Wind",
         "link": {
             "music": "https://music.163.com/#/song?id=1399729935",
-            "image": "https://www.pixiv.net/artworks/47123139"
+            "image": "https://twitter.com/soyutrys/status/1741505268708753697/video/1"
         },
         "color": {
             "font": "#fff",
@@ -57,6 +77,26 @@
         "resource": {
             "music": "./orange/01/1.m4a",
             "image": "./orange/01/1.png"
+        }
+    },
+    {
+        "code": "ORANGE 02",
+        "name": "Light Dance -Home",
+        "singer": "小瀬村晶",
+        "album": "Tiny Musical",
+        "link": {
+            "music": "https://music.163.com/#/song?id=22738344",
+            "image": "https://www.pixiv.net/artworks/108554216"
+        },
+        "color": {
+            "font": "#fff",
+            "back": "#324",
+            "top": "#c33",
+            "face": "#d70"
+        },
+        "resource": {
+            "music": "./orange/02/1.m4a",
+            "image": "./orange/02/1.png"
         }
     }
 ]

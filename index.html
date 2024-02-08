@@ -138,6 +138,7 @@
 
                 this.time_bar_container.addEventListener("click", (event) => {
                     event.stopPropagation();
+                    if (this.video.paused) this.paused = true;
                     if (this.paused) this.play();
                     else this.pause();
                 });
